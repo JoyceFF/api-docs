@@ -1,0 +1,41 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" disabled="true" href="javascript:void(0)">
+        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+      </a>
+      <span class="navbar-brand" href="#" disabled="true"><strong style="color: white">Docs</strong></span>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-left">
+        <li><a href="#"  [routerLink]="['/project-view']">Project</a></li>
+        <li><a href="#"  [routerLink]="['/model-view']">Model</a></li>
+        <li><a href="#"  [routerLink]="['/settings-view']">Settings</a></li>
+        <li><a href="#"  [routerLink]="['/help-view']">Help</a></li>
+      </ul>
+      <!--<form class="navbar-form navbar-left" role="search">-->
+        <!--<div class="form-group">-->
+          <!--<input [(ngModel)]="selected"-->
+                 <!--[typeahead]="statesComplex"-->
+                 <!--typeaheadOptionField="name"-->
+                 <!--(typeaheadLoading)="typeAheadLoading($event)"-->
+                 <!--(typeaheadOnSelect)="typeAheadOnSelect($event)"-->
+                 <!--[typeaheadScrollable]="true"-->
+                 <!--[typeaheadOptionsLimit]="10000"-->
+                 <!--[typeaheadOptionsInScrollableView]="20"-->
+                 <!--class="form-control"-->
+                 <!--[ngModelOptions]="{standalone: true}">-->
+        <!--</div>-->
+      <!--</form>-->
+    </div>
+  </div>
+</nav>
+<div class="main">
+  <!--<button type="button" class="btn btn-primary" (click)="add()">Add more</button>-->
+  <router-outlet></router-outlet>
+</div>
+<div style="position:fixed;z-index:9999;right: 10px; top: 10px;width: 300px">
+  <div *ngFor="let alert of alerts">
+    <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout" [dismissible]="alert.dismissible">{{ alert.msg }}</alert>
+  </div>
+</div>

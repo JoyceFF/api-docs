@@ -1,0 +1,54 @@
+package as.leap.maxwon.docs.common.curl;
+
+import as.leap.maxwon.docs.common.exception.CurlException;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.ParseException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+
+final class ReadArguments {
+
+    static CommandLine getCommandLineFromRequest(final String requestCommand) {
+
+        // configure a parser
+        final DefaultParser parser = new DefaultParser();
+
+        final String requestCommandWithoutBasename = requestCommand.replaceAll ("^[ ]*curl[ ]*", " ") + " ";
+        final String [] args = ReadArguments.getArgsFromCommand (requestCommandWithoutBasename);
+        final CommandLine commandLine;
+        try {
+            commandLine = parser.parse (Arguments.ALL_OPTIONS, args);
+        } catch (final ParseException e) {
+            new HelpFormatter().printHelp ("curl [options] url", Arguments.ALL_OPTIONS);
+            throw new CurlException(e);
+        }
+        return commandLine;
+    }
+
+    private static String [] getArgsFromCommand (final String requestCommandWithoutBasename) {
+        final String requestCommandInput = requestCommandWithoutBasename.replaceAll ("\\s+-([a-zA-Z0-9])", " -$1 ");
+        final Matcher matcher = Arguments.ARGS_SPLIT_REGEX.matcher (requestCommandInput);
+        final List<String> args = new ArrayList<> ();
+        while (matcher.find ()) {
+            args.add (ReadArguments.removeSlashes (matcher.group (1).trim ()));
+        }
+        return args.toArray (new String [args.size ()]);
+    }
+
+    private static String removeSlashes (final String arg) {
+        if (arg.length () == 0) {
+            return arg;
+        }
+        if (arg.charAt (0) == '\"') {
+            return arg.substring (1, arg.length () - 1).replaceAll ("\\\"", "\"");
+        }
+        if (arg.charAt (0) == '\'') {
+            return arg.substring (1, arg.length () - 1).replaceAll ("\\\'", "\'");
+        }
+        return arg;
+    }
+}

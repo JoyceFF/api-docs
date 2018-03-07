@@ -1,0 +1,9 @@
+[2017:09:270 18:48:11:775] [INFO] - as.leap.maxwon.docs.test.Bootstrap.lambda$null$1(Bootstrap.java:61) - Deploy [as.leap.maxwon.docs.server.DocsVerticle] success.
+[2017:09:270 18:48:11:789] [INFO] - as.leap.maxwon.docs.server.DocsVerticle.lambda$start$0(DocsVerticle.java:57) - 
+ Http server start success listening for 9800
+[2017:09:270 18:48:25:403] [INFO] - as.leap.maxwon.docs.test.Bootstrap.lambda$null$1(Bootstrap.java:61) - Deploy [as.leap.maxwon.docs.server.DocsVerticle] success.
+[2017:09:270 18:48:25:416] [INFO] - as.leap.maxwon.docs.server.DocsVerticle.lambda$start$0(DocsVerticle.java:57) - 
+ Http server start success listening for 9800
+[2017:09:270 19:07:17:015] [INFO] - as.leap.maxwon.docs.test.Bootstrap.lambda$null$1(Bootstrap.java:61) - Deploy [as.leap.maxwon.docs.server.DocsVerticle] success.
+[2017:09:270 19:07:17:028] [INFO] - as.leap.maxwon.docs.server.DocsVerticle.lambda$start$0(DocsVerticle.java:57) - 
+ Http server start success listening for 9800

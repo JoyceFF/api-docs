@@ -1,0 +1,192 @@
+
+<div class="sidebar" style="padding-top: 5px">
+  <div style="height: auto">
+    <button type="button" class="btn btn-primary" (click)="openMarkdownGenerate()">生成</button>
+    <button type="button" class="btn btn-primary" (click)="openMarkdownPreview()" >预览</button>
+    <button type="button" class="btn btn-primary" (click)="onCheckedAllSelectedMethod()">全选</button>
+    <button type="button" class="btn btn-primary" (click)="onClearSelectedMethod()">清空</button>
+  </div>
+
+  <div class="list-group" style="height: 98%;padding-bottom: 20px;top:5px;overflow: auto;position: relative;">
+    <a href="javascript:void(0)" class="list-group-item" [class.active]="item === selectedMethod"
+       *ngFor="let item of methods" (click)="onSelectMethod(item)" style="overflow: hidden">
+      <input type="checkbox" (click)="onSelectedMethod(item.id)" [checked]="selectedMethods[item.id]"/> {{item.name}}
+    </a>
+  </div>
+</div>
+
+<div class="col-md-offset-3 main" style="margin-top: 65px;margin-left: 280px;padding-right: 30px">
+  <div style="text-align: center;margin-bottom: 20px"><h1>接口详情</h1></div>
+
+    <form class="form-horizontal" *ngIf="methodDetail">
+      <div class="form-group">
+        <label class="col-sm-3 control-label">接口名称:</label>
+        <div class="col-sm-6">
+          <input class="form-control" [(ngModel)]="methodDetail.name" name="name" value="{{methodDetail.name}}">
+        </div>
+      </div>
+      <div class="form-group">
+      <label class="col-sm-3 control-label">接口描述:</label>
+      <div class="col-sm-6">
+        <input class="form-control" [(ngModel)]="methodDetail.describe" name="describe" value="{{methodDetail.describe}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">请求地址:</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" [(ngModel)]="methodDetail.url" name="url" value="{{methodDetail.url}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">请求类型:</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" [(ngModel)]="methodDetail.http" name="http" value="{{methodDetail.http}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">权限级别:</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" [(ngModel)]="methodDetail.permission" name="permission" value="{{methodDetail.permission}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">参数说明:</label>
+      <div class="col-sm-6">
+        <form #addParamForm="ngForm">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>参数名称</th>
+              <th>参数类型</th>
+              <th>默认值</th>
+              <th>是否必填</th>
+              <th>参数位置</th>
+              <th>参数描述</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody *ngIf="methodDetail">
+            <tr *ngFor="let param of methodDetail.params">
+              <td>{{param.name}}</td>
+              <td>{{param.type}}</td>
+              <td>{{param.defaultValue}}</td>
+              <td>{{param.required}}</td>
+              <td>{{param.paramType}}</td>
+              <td>{{param.describe}}</td>
+              <td><a href="javascript:void(0)" (click)="deleteParam(param.name)">X</a></td>
+            </tr>
+
+            <tr *ngIf="addParamStatus == true">
+              <td>
+                <input type="text" class="form-control" name="name" required #name="ngModel" ngModel>
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                  <div *ngIf="name.errors.required">
+                    name is required.
+                  </div>
+                </div>
+              </td>
+              <td>
+                <input type="text" class="form-control" name="type" required #type="ngModel" ngModel>
+                <div *ngIf="type.invalid && (type.dirty || type.touched)" class="alert alert-danger">
+                  <div *ngIf="type.errors.required">
+                    type is required.
+                  </div>
+                </div>
+              </td>
+              <td><input type="text" class="form-control" name="defaultValue" ngModel></td>
+              <td><input type="text" class="form-control" name="required" ngModel></td>
+              <td>
+                <input type="text" class="form-control" name="paramType" required #paramType="ngModel" ngModel>
+                <div *ngIf="paramType.invalid && (paramType.dirty || paramType.touched)" class="alert alert-danger">
+                  <div *ngIf="paramType.errors.required">
+                    paramType is required.
+                  </div>
+                </div>
+              </td>
+              <td><input type="text" class="form-control" name="describe" ngModel></td>
+              <td>
+                <a href="javascript:void(0)" (click)="submitParam(addParamForm)">√</a>&nbsp;
+                <a href="javascript:void(0)" (click)="closeParam()">X</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </form>
+        <a href="javascript:void(0)" (click)="addParam()">添加参数</a>
+        <a href="javascript:void(0)" (click)="openSelectModel()">解析描述</a>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">
+
+      </label>
+      <div class="col-sm-6">
+        <div class="col-sm-6">
+          <button type="button" class="btn btn-primary" (click)="openHeadersModal()">设置请求headers</button>
+          <a href="javascript:void(0)" (click)="getDefaultHeader(methodDetail.permission)">默认值</a>
+        </div>
+        <div class="col-sm-6">
+          <button type="button" class="btn btn-primary" (click)="openParamsModal()">设置请求params</button>
+        </div>
+
+        <br>
+        <br>
+        <table class="table table-bordered" *ngIf="exampleHeaders">
+          <thead>
+          <tr>
+            <th>key</th>
+            <th>value</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let k of headersNames">
+            <td>{{k}}</td>
+            <td>{{exampleHeaders[k]}}</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-bordered" *ngIf="exampleParams">
+          <thead>
+          <tr>
+            <th>key</th>
+            <th>value</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let k of paramsNames">
+            <td>{{k}}</td>
+            <td>{{exampleParams[k]}}</td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Shell 语法:</label>
+      <div class="col-sm-6">
+        <pre>{{methodDetail.shell}}</pre>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">JavaScript 语法:</label>
+      <div class="col-sm-6">
+        <pre>{{methodDetail.javascript}}</pre>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Java 语法:</label>
+      <div class="col-sm-6">
+        <pre>{{methodDetail.java}}</pre>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">返回值:</label>
+      <div class="col-sm-6">
+        <pre>{{methodDetail.result}}</pre>
+      </div>
+    </div>
+  </form>
+  <!--<markdown-to-html [data]="tables"></markdown-to-html>-->
+</div>

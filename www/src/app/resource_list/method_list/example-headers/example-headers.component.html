@@ -1,0 +1,41 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">示例请求参数</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <form class="form-horizontal" #exampleHeadersForm="ngForm" >
+    <div class="form-group">
+      <label class="col-sm-4 control-label">X-ML-AppId:</label>
+      <div class="col-sm-6">
+        <input type="text" name="X-ML-AppId" class="form-control" ngModel>
+      </div>
+    </div>
+    <div class="form-group" *ngIf="permission == 'API_KEY'">
+      <label class="col-sm-4 control-label">X-ML-APIKey:</label>
+      <div class="col-sm-6">
+        <input type="text" name="X-ML-APIKey" class="form-control"  ngModel>
+      </div>
+    </div>
+
+    <div class="form-group" *ngIf="permission == 'MASTER_KEY'">
+      <label class="col-sm-4 control-label">X-ML-MasterKey:</label>
+      <div class="col-sm-6">
+        <input type="text" name="X-ML-MasterKey" class="form-control" ngModel >
+      </div>
+    </div>
+
+    <div class="form-group" *ngIf="permission != 'API_KEY' && permission != 'MASTER_KEY'">
+      <label class="col-sm-4 control-label">X-ML-Session-Token:</label>
+      <div class="col-sm-6">
+        <input type="text" name="X-ML-Session-Token" class="form-control" ngModel>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-default" (click)="saveHeaders(exampleHeadersForm)">Save</button>
+  <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Close</button>
+</div>

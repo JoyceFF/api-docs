@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">示例请求参数</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <form class="form-horizontal" #exampleParamsForm="ngForm" >
+    <div class="form-group" *ngFor="let param of params">
+      <label class="col-sm-4 control-label">{{param.name}}:</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" name="{{param.name}}" ngModel>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-default" (click)="saveParams(exampleParamsForm)">Save</button>
+  <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Close</button>
+</div>

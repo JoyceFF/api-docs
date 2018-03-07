@@ -1,0 +1,16 @@
+<button type="button" class="btn btn-info" (click)="openAddApiFolder()">添加文件夹</button>
+<div>
+  <div  class="box" *ngFor="let item of allApiFolders">
+    <div class="info" [routerLink]="['/project-view/api-folder/api-view',item.id]">
+      <div class="title">{{item.name}}</div>
+      <div class="intro">{{item.describe}}</div>
+    </div>
+    <div class="status">片刻之前更新<span class="creator">@贾威威</span></div>
+    <div class="tools">
+      <i class="glyphicon glyphicon-pencil" (click)="openUpApiFolder(item)" title="修改"></i>
+      <i class="glyphicon glyphicon-export"  title="复制RAP插件地址"></i>
+      <i class="glyphicon glyphicon-eye-open" title="详情"></i>
+      <i class="glyphicon glyphicon-trash" (click)="delApiFolder(item.id)" title="删除"></i>
+    </div>
+  </div>
+</div>

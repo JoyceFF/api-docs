@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">保存详情</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <div *ngFor="let m of msg">
+     <div style="margin-bottom: 10px" *ngIf="m['type'] == 'info'"><span class="label label-info">{{m['msg']}}</span></div>
+     <div style="margin-bottom: 10px" *ngIf="m['type'] == 'success'"><span class="label label-success">{{m['msg']}}</span></div>
+    <div style="margin-bottom: 10px" *ngIf="m['type'] == 'delete'"><span class="label label-danger">{{m['msg']}}</span></div>
+  </div>
+
+</div>

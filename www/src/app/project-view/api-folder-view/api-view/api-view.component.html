@@ -1,0 +1,301 @@
+<div class="sidebar" style="padding-top: 5px">
+  <div style="height: auto">
+    <button type="button" class="btn btn-primary" (click)="updateOrCreateApi()">保存</button>
+    <button type="button" class="btn btn-primary" (click)="openAddApi()">添加</button>
+    <button type="button" class="btn btn-primary" (click)="openMarkdownPreview()">预览</button>
+    <button type="button" class="btn btn-primary" (click)="onCheckedApiAll()()">全选</button>
+    <button type="button" class="btn btn-primary" (click)="onClearCheckedApi()">清空</button>
+  </div>
+
+  <div class="list-group" style="height: 98%;padding-bottom: 20px;top:5px;overflow: auto;position: relative;">
+    <a href="javascript:void(0)" class="list-group-item" [class.active]="item === selectedApi"
+       *ngFor="let item of allApi" (click)="onSelectedApi(item)" style="overflow: hidden">
+      <input type="checkbox" (click)="onCheckedApi(item)" [checked]="checkedApis.includes(item)"/>
+      {{item.name}}
+      <span class="badge" style="background-color: red;"><a href="javascript:void(0)" style="color: white;"
+                                                            (click)="deleteApi(item)">删除</a></span>
+    </a>
+
+  </div>
+</div>
+
+<div style="margin-left: 350px">
+  <!--<div style="text-align: center;margin-bottom: 20px"><h1>接口详情</h1></div>-->
+  <form class="form-horizontal" *ngIf="selectedApi">
+    <div class="form-group">
+      <label class="form-control-title control-label">接口名称:</label>
+      <div class="col-sm-6">
+        <input class="form-control" name="name" [(ngModel)]="selectedApi.name">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-control-title control-label">接口描述:</label>
+      <div class="col-sm-6">
+        <textarea class="form-control" name="describe" [(ngModel)]="selectedApi.describe"></textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-control-title control-label">请求地址:</label>
+      <div class="col-sm-6">
+        <input class="form-control" name="url" [(ngModel)]="selectedApi.url">
+        <a class="label label-primary" href="javascript:void(0)"
+           (click)="analysisPathParam(selectedApi.url)">从url解析路径参数</a>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-control-title control-label">路径参数:</label>
+      <div class="col-sm-10">
+        <table class="table table-bordered" style="table-layout:fixed;min-width: 800px;">
+          <thead>
+          <tr>
+            <th width="80">操作</th>
+            <th width="256">名称</th>
+            <th>描述</th>
+          </tr>
+          </thead>
+          <tbody *ngIf="selectedApi">
+          <tr *ngFor="let param of selectedApi.pathParams">
+            <td>
+              <a href="javascript:void(0)" (click)="deletePathParam(param)"><i
+                class="glyphicon glyphicon-remove"></i></a>
+            </td>
+            <td (click)="editTextarea($event,param,'name')">{{param.name}}</td>
+            <td (click)="editTextarea($event,param,'describe')">{{param.describe}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-control-title control-label">请求类型:</label>
+      <div class="col-sm-6">
+
+        <input class="form-control" name="http"
+               [(ngModel)]="selectedApi.http"
+               [typeahead]="https"
+               [typeaheadOptionsLimit]="20"
+               [typeaheadMinLength]="0"
+               [typeaheadScrollable]="true"
+               [typeaheadOptionsInScrollableView]="8"/>
+
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-control-title control-label">请求权限:</label>
+      <div class="col-sm-6">
+
+        <input class="form-control"
+               name="permission"
+               [(ngModel)]="selectedApi.permission"
+               [typeahead]="allApiPermission"
+               [typeaheadOptionsLimit]="20"
+               [typeaheadMinLength]="0"
+               [typeaheadScrollable]="true"
+               typeaheadOptionField="name"
+               [typeaheadOptionsInScrollableView]="8"/>
+
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-control-title control-label">请求header:</label>
+      <div class="col-sm-10">
+        <table class="table table-bordered" style="table-layout:fixed;min-width: 800px;">
+          <thead>
+          <tr>
+            <th width="80">操作</th>
+            <th width="200">key</th>
+            <th width="300">value</th>
+            <th>描述</th>
+          </tr>
+          </thead>
+          <tbody *ngIf="selectedApi">
+          <tr *ngFor="let header of selectedApi.headers">
+            <td>
+              <a href="javascript:void(0)" (click)="deleteHeader(header)"><i class="glyphicon glyphicon-remove"></i></a>
+            </td>
+            <td (click)="editTextarea($event,header,'key')">{{header.key}}</td>
+            <td (click)="editTextarea($event,header,'value')">{{header.value}}</td>
+            <td (click)="editTextarea($event,header,'describe')">{{header.describe}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <a href="javascript:void(0)" class="label label-primary" (click)="openAddHeader()">添加header</a>
+        <a href="javascript:void(0)" class="label label-primary"
+           (click)="openSelectModel(selectedApi.headers,'describe','key',true)">导入header</a>
+        <a href="javascript:void(0)" class="label label-primary"
+           (click)="openSelectModel(selectedApi.headers,'describe','key')">导入描述</a>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-control-title control-label">查询参数:</label>
+      <div class="col-sm-10">
+        <table class="table table-bordered" style="table-layout:fixed;min-width: 800px;">
+          <thead>
+          <tr>
+            <th width="80">操作</th>
+            <th width="256">名称</th>
+            <th width="100">类型</th>
+            <th width="100">默认值</th>
+            <th width="70">必填</th>
+            <th>描述</th>
+          </tr>
+          </thead>
+          <tbody *ngIf="selectedApi">
+          <tr *ngFor="let param of selectedApi.params" [class.active]="param.level == 2"
+              [class.warning]="param.level == 3" [class.success]="param.level == 4">
+            <td>
+              <a href="javascript:void(0)" (click)="deleteParam(param)"><i class="glyphicon glyphicon-remove"></i></a>
+              <a href="javascript:void(0)" style="margin-left:5px;color:#47a947;"
+                 (click)="openAddParam('param',param.id)" *ngIf="param.type == 'Object' || param.type == 'Array'"><i
+                class="glyphicon glyphicon-plus"></i></a>
+            </td>
+            <td [class.td-level-2]="param.level == 2" [class.td-level-3]="param.level == 3"
+                [class.td-level-4]="param.level == 4" (click)="editTextarea($event,param,'name')">{{param.name}}
+            </td>
+            <td (click)="editSelect($event,param,'type',paramType,param.type)">{{param.type}}</td>
+            <td (click)="editTextarea($event,param,'defaultValue')">{{param.defaultValue}}</td>
+            <td (click)="editSelect($event,param,'required',paramRequired,param.required)">{{param.required}}</td>
+            <td (click)="editTextarea($event,param,'describe');">{{param.describe}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <a href="javascript:void(0)" class="label label-primary" (click)="openAddParam('param')">添加参数</a>
+        <a href="javascript:void(0)" class="label label-primary" (click)="openParamJsonImport('param')">JSON导入</a>
+        <a href="javascript:void(0)" class="label label-primary" (click)="openSelectModel(selectedApi.params,'describe','name',false,true)">导入参数</a>
+        <a href="javascript:void(0)" class="label label-primary" (click)="openSelectModel(selectedApi.params,'describe','name')">导入描述</a>
+        <a href="javascript:void(0)" class="label label-primary" (click)="previewParamJson()"
+           [class.label-success]="paramJsonShow">预览</a>
+        <div *ngIf="paramJsonShow">
+          <br>
+          <pre-view pre="{{paramJson}}" grammer="json"></pre-view>
+        </div>
+
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-control-title control-label">Body:</label>
+      <div class="col-sm-10">
+        <table class="table table-bordered" style="table-layout:fixed;min-width: 800px;">
+          <thead>
+          <tr>
+            <th width="80">操作</th>
+            <th width="256">名称</th>
+            <th width="100">类型</th>
+            <th width="100">默认值</th>
+            <th width="70">必填</th>
+            <th>描述</th>
+          </tr>
+          </thead>
+          <tbody *ngIf="selectedApi">
+          <tr *ngFor="let param of selectedApi.body" [class.active]="param.level == 2"
+              [class.warning]="param.level == 3" [class.success]="param.level == 4">
+            <td>
+              <a href="javascript:void(0)" (click)="deleteBody(param)"><i class="glyphicon glyphicon-remove"></i></a>
+              <a href="javascript:void(0)" style="margin-left:5px;color:#47a947;"
+                 (click)="openAddParam('body',param.id)" *ngIf="param.type == 'Object'"><i
+                class="glyphicon glyphicon-plus"></i></a>
+            </td>
+            <td [class.td-level-2]="param.level == 2" [class.td-level-3]="param.level == 3"
+                [class.td-level-4]="param.level == 4" (click)="editTextarea($event,param,'name')">{{param.name}}
+            </td>
+            <td (click)="editSelect($event,param,'type',paramType,param.type)">{{param.type}}</td>
+            <td (click)="editTextarea($event,param,'defaultValue')">{{param.defaultValue}}</td>
+            <td (click)="editSelect($event,param,'required',paramRequired,param.required)">{{param.required}}</td>
+            <td (click)="editTextarea($event,param,'describe')">{{param.describe}}</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <a href="javascript:void(0)" class="label label-primary" (click)="openAddParam('body')">添加参数</a>
+        <a href="javascript:void(0)" class="label label-primary" (click)="openParamJsonImport('body')">JSON导入</a>
+        <a href="javascript:void(0)" class="label label-primary"
+           (click)="openSelectModel(selectedApi.body,'describe','name',false,true)">导入参数</a>
+        <a href="javascript:void(0)" class="label label-primary"
+           (click)="openSelectModel(selectedApi.body,'describe','name')">导入描述</a>
+        <a href="javascript:void(0)" class="label label-primary" (click)="previewBodyJson()"
+           [class.label-success]="bodyJsonShow">预览</a>
+        <div *ngIf="bodyJsonShow">
+          <br>
+          <pre-view pre="{{bodyJson}}" grammer="json"></pre-view>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-control-title control-label">返回值:</label>
+      <div class="col-sm-10">
+
+        <table class="table table-bordered" style="table-layout:fixed;min-width: 800px;">
+          <thead>
+          <tr>
+            <th width="80">操作</th>
+            <th width="256">名称</th>
+            <th width="100">类型</th>
+            <th width="100">默认值</th>
+            <th width="70">必返回</th>
+            <th>描述</th>
+          </tr>
+          </thead>
+          <tbody *ngIf="selectedApi">
+          <tr *ngFor="let param of selectedApi.result" [class.active]="param.level == 2"
+              [class.warning]="param.level == 3" [class.success]="param.level == 4">
+            <td>
+              <a href="javascript:void(0)" (click)="deleteResult(param)"><i class="glyphicon glyphicon-remove"></i></a>
+              <a href="javascript:void(0)" style="margin-left:5px;color:#47a947;"
+                 (click)="openAddParam('result',param.id)" *ngIf="param.type == 'Object'"><i
+                class="glyphicon glyphicon-plus"></i></a>
+            </td>
+            <td [class.td-level-2]="param.level == 2" [class.td-level-3]="param.level == 3"
+                [class.td-level-4]="param.level == 4" (click)="editTextarea($event,param,'name')">{{param.name}}
+            </td>
+            <td (click)="editSelect($event,param,'type',paramType,param.type)">{{param.type}}</td>
+            <td (click)="editTextarea($event,param,'defaultValue')">{{param.defaultValue}}</td>
+            <td (click)="editSelect($event,param,'required',paramRequired,param.required)">{{param.required}}</td>
+            <td (click)="editTextarea($event,param,'describe');">{{param.describe}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <a href="javascript:void(0)" class="label label-primary" (click)="openAddParam('result')">添加参数</a>
+        <a href="javascript:void(0)" class="label label-primary" (click)="openParamJsonImport('result')">JSON导入</a>
+        <a href="javascript:void(0)" class="label label-primary"
+           (click)="openSelectModel(selectedApi.result,'describe','name')">导入描述</a>
+        <a href="javascript:void(0)" class="label label-primary" (click)="previewResultJson()"
+           [class.label-success]="resultJsonShow">预览</a>
+        <div *ngIf="resultJsonShow">
+          <br>
+          <pre-view pre="{{resultJson}}" grammer="json"></pre-view>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-control-title control-label">示例:</label>
+      <div class="col-sm-10 curl">
+        <pre-view pre="{{selectedApi.curl}}" grammer="bash"></pre-view>
+        <a href="javascript:void(0)" class="label label-primary" (click)="openCurlImport()">导入curl</a>
+        <a href="javascript:void(0)" class="label label-primary" (click)="previewJavaSample()"
+           [class.label-success]="javaSampleShow">根据curl生成java示例</a>
+        <a href="javascript:void(0)" class="label label-primary" (click)="previewJavascriptSample()"
+           [class.label-success]="javascriptSampleShow">根据curl生成javascript示例</a>
+        <a href="javascript:void(0)" class="label label-primary" (click)="previewCurlResult()"
+           [class.label-success]="curlResultShow">查看返回值</a>
+        <div *ngIf="javaSampleShow">
+          <br>
+          <span class="label label-info">java示例 :</span>
+          <pre-view pre="{{javaSample}}" grammer="java"></pre-view>
+        </div>
+        <div *ngIf="javascriptSampleShow">
+          <br>
+          <span class="label label-info">javascript示例 :</span>
+          <pre-view pre="{{javascriptSample}}" grammer="javascript"></pre-view>
+        </div>
+        <div *ngIf="curlResultShow">
+          <br>
+          <span class="label label-info">返回值 :</span>
+          <pre-view pre="{{curlResult}}" grammer="json"></pre-view>
+        </div>
+      </div>
+    </div>
+  </form>
+
+</div>

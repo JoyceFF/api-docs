@@ -1,0 +1,11 @@
+
+<div class="main">
+
+  <div class="grid grid-pad" style="overflow: auto">
+    <a  class="col-1-4" *ngFor="let item of resource"  [routerLink]="['/generateMarkdownComponent', item.id]" >
+      <div class="module hero">
+        <h4>{{item.name}}</h4>
+      </div>
+    </a>
+  </div>
+</div>

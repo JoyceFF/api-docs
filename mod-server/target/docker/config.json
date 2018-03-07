@@ -1,0 +1,12 @@
+{
+  "port":"5555",
+  "redis":{
+    "host":"0.0.0.0",
+    "port":6379
+  },
+  "mongo":{
+    "host":"0.0.0.0",
+    "port":27017,
+    "database":"api_docs"
+  }
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="[%d{yyyy:MM:DD HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+    </Console>
+
+    <RollingFile name="RollingFile" fileName="log/maxwon_docs.log" filePattern="log/maxwon_docs.%i">
+      <PatternLayout pattern="[%d{yyyy:MM:DD HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+      <DefaultRolloverStrategy max="16"/>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="10 MB"/>
+      </Policies>
+    </RollingFile>
+
+    <RollingFile name="RollingJsonFile" fileName="log/json/maxwon_docs-json.log" filePattern="log/json/maxwon_docs-json.%i">
+      <MaxLeapJsonLayout/>
+      <DefaultRolloverStrategy max="2"/>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="50 MB"/>
+      </Policies>
+    </RollingFile>
+  </Appenders>
+
+
+  <Loggers>
+    <Root level="INFO">
+      <AppenderRef ref="RollingFile"/>
+      <AppenderRef ref="RollingJsonFile"/>
+
+    </Root>
+    <Root level="DEBUG">
+      <AppenderRef ref="Console"/>
+    </Root>
+  </Loggers>
+</Configuration>

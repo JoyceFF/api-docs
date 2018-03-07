@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">修改文件夹</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <form class="form-horizontal" #upApiFolderForm="ngForm">
+    <div class="form-group">
+      <label class="col-sm-4 control-label">名称:</label>
+      <div class="col-sm-6">
+        <input class="form-control" name="name" [(ngModel)]="apiFolder.name">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label">描述:</label>
+      <div class="col-sm-6">
+        <input class="form-control" name="describe" [(ngModel)]="apiFolder.describe">
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" (click)="upApiFolder(upApiFolderForm)">Save</button>
+  <button class="btn btn-default" (click)="bsModalRef.hide()">Close</button>
+</div>

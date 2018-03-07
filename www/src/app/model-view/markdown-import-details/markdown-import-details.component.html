@@ -1,0 +1,63 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Model详情</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div *ngIf="previewStatus == false">
+    <textarea style="width: 570px;height: 300px" [(ngModel)]="markdown" (keyup)="change()"></textarea>
+    <table class="table table-striped" *ngIf="item">
+      <thead>
+      <tr>
+        <th>markdown 列</th>
+        <th>model 列</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let header of item.header">
+        <td>{{header}}</td>
+        <td>
+          <select class="form-control" (change)="SelectChange(header,$event)">
+            <option *ngFor="let op of modelFields" value="{{op}}">
+              {{modelFieldsMap[op]}}
+            </option>
+          </select>
+        </td>
+        <td>
+          <a href="javascript:void(0)" class="label label-primary" (click)="delete(header)" >删除</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div *ngIf="previewStatus == true">
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>名称</th>
+        <th>类型</th>
+        <th>默认值</th>
+        <th>描述</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody >
+      <tr *ngFor="let details of modelDetails">
+        <td>{{details.name}}</td>
+        <td (click)="editSelect($event,details,'type',paramType,details.type)">{{details.type}}</td>
+        <td (click)="editTextarea($event,details,'defaultValue')">{{details.defaultValue}}</td>
+        <td (click)="editTextarea($event,details,'describe')">{{details.describe}}</td>
+        <td><a href="javascript:void(0)" (click)="deleteDetails(details)">X</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" (click)="save()">保存</button>
+  <button class="btn btn-default" (click)="preview()">预览</button>
+  <button class="btn btn-default" (click)="bsModalRef.hide()">取消</button>
+</div>

@@ -1,0 +1,122 @@
+<tabset>
+  <tab heading='权限管理'>
+    <br>
+    <button type="button" class="btn btn-info" (click)="addApiPermissionStatus=true">添加</button>
+    <button type="button" class="btn btn-info" (click)="saveApiPermission()">保存</button>
+    <form #addApiPermissionForm="ngForm">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>名称</th>
+          <th>描述</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of allApiPermission">
+          <td (click)="editTextarea($event,item,'name')">{{item.name}}</td>
+          <td (click)="editTextarea($event,item,'describe')">{{item.describe}}</td>
+          <td width="300px">
+            <a href="javascript:void(0)" class="label label-primary" (click)="delete(item.id)">删除</a>
+          </td>
+        </tr>
+
+        <tr *ngIf="addApiPermissionStatus == true">
+          <td>
+            <input class="form-control" name="name" required #name="ngModel" ngModel>
+            <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+              <div *ngIf="name.errors.required">
+                name is required.
+              </div>
+            </div>
+          </td>
+          <td>
+            <input class="form-control" name="describe" ngModel>
+          </td>
+
+          <td>
+            <a href="javascript:void(0)" class="label label-primary" (click)="submit(addApiPermissionForm)">提交</a>&nbsp;
+            <a href="javascript:void(0)" class="label label-primary" (click)="closeAdd()">取消</a>
+          </td>
+        </tr>
+
+      </table>
+    </form>
+
+  </tab>
+
+  <tab heading='生成markdown模版'>
+    <br/>
+    <button type="button" class="btn btn-info" (click)="saveMarkdownTemplate()">保存</button>
+    <tabset>
+      <tab heading='整体设置'>
+        <br>
+        <ng-template #itemTemplate let-item="item" let-index="index"><span>{{item.value}}</span></ng-template>
+
+        <div class="row" >
+          <div class="col-xs-6 col-6 col-md-5 col-lg-3">
+            <bs-sortable
+              [(ngModel)]="markdownAllSettings"
+              [itemTemplate] = "itemTemplate"
+              fieldName="name"
+              itemClass="sortable-item"
+              itemActiveClass="sortable-item-active"
+              placeholderItem="拖在这里"
+              placeholderClass="sortable-placeholder"
+              wrapperClass="sortable-wrapper"
+            ></bs-sortable>
+            <!--<pre class="code-preview">{{ markdownAllSettings | json }}</pre>-->
+          </div>
+          <div class="col-xs-6 col-6 col-md-5 col-lg-3">
+            <bs-sortable
+              [(ngModel)]="markdown"
+              [itemTemplate] = "itemTemplate"
+              fieldName="name"
+              itemClass="sortable-item"
+              itemActiveClass="sortable-item-active"
+              placeholderItem="拖在这里"
+              placeholderClass="sortable-placeholder"
+              wrapperClass="sortable-wrapper"
+            ></bs-sortable>
+            <!--<pre class="code-preview">{{ markdown | json }}</pre>-->
+          </div>
+        </div>
+
+      </tab>
+      <tab heading='接口详情设置'>
+        <br>
+        <div class="row" >
+          <div class="col-xs-6 col-6 col-md-5 col-lg-3">
+            <bs-sortable
+              [(ngModel)]="markdownApiDetailsAllSettings"
+              [itemTemplate] = "itemTemplate"
+              fieldName="name"
+              itemClass="sortable-item"
+              itemActiveClass="sortable-item-active"
+              placeholderItem="拖在这里"
+              placeholderClass="sortable-placeholder"
+              wrapperClass="sortable-wrapper"
+            ></bs-sortable>
+            <!--<pre class="code-preview">{{ itemObjectsLeft | json }}</pre>-->
+          </div>
+          <div class="col-xs-6 col-6 col-md-5 col-lg-3">
+            <bs-sortable
+              [(ngModel)]="markdownApiDetails"
+              [itemTemplate] = "itemTemplate"
+              fieldName="name"
+              itemClass="sortable-item"
+              itemActiveClass="sortable-item-active"
+              placeholderItem="拖在这里"
+              placeholderClass="sortable-placeholder"
+              wrapperClass="sortable-wrapper"
+            ></bs-sortable>
+            <!--<pre class="code-preview">{{ itemObjectsRight | json }}</pre>-->
+          </div>
+        </div>
+      </tab>
+    </tabset>
+
+
+
+  </tab>
+</tabset>

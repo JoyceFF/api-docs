@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">选择Model</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <input [(ngModel)]="selected"
+         [typeahead]="statesComplex"
+         typeaheadOptionField="name"
+         [typeaheadScrollable]="true"
+         [typeaheadOptionsLimit]="10000"
+         (typeaheadOnSelect)="typeAheadOnSelect($event)"
+         [typeaheadOptionsInScrollableView]="20"
+         [typeaheadMinLength]="0"
+         class="form-control"
+         [ngModelOptions]="{standalone: true}">
+  <br>
+  <table class="table table-striped" *ngIf="modelDetails">
+    <thead>
+    <tr>
+      <th>名称</th>
+      <th>类型</th>
+      <th>默认值</th>
+      <th>描述</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let details of modelDetails">
+      <td>{{details.name}}</td>
+      <td (click)="editSelect($event,details,'type',paramType,details.type)">{{details.type}}</td>
+      <td (click)="editTextarea($event,details,'defaultValue')">{{details.defaultValue}}</td>
+      <td (click)="editTextarea($event,details,'describe')">{{details.describe}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div class="modal-footer" *ngIf="importHeader == false && importParam == false">
+  <button class="btn btn-default" (click)="replaceAllFun(true)">替换所有</button>
+  <button class="btn btn-default" (click)="replaceAllFun(false)">只填补空缺</button>
+</div>
+
+<div class="modal-footer" *ngIf="importHeader == true || importParam == true">
+  <button class="btn btn-default" (click)="importFun()">导入</button>
+  <button class="btn btn-default" (click)="this.bsModalRef.hide()">取消</button>
+</div>

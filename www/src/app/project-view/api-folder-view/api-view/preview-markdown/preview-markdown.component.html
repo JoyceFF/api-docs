@@ -1,0 +1,11 @@
+<div class="modal-body">
+  <div *ngIf="generateStatus == false && markdown != null">
+    <a href="javascript:void(0)" class="btn btn-primary" (click)="download()" *ngIf="fileName == null">生成文件</a>
+    <a href="javascript:void(0)" class="btn btn-primary" href="http://127.0.0.1:5555/static/{{fileName}}.md" download="download" *ngIf="fileName">下载</a>
+  </div>
+
+  <div *ngIf="generateStatus">
+    生成中...
+  </div>
+  <markdown-to-html [data]="markdown"></markdown-to-html>
+</div>
