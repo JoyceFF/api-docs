@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/api-docs.iml" filepath="$PROJECT_DIR$/api-docs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/docs-common/docs-common.iml" filepath="$PROJECT_DIR$/docs-common/docs-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/docs-service/docs-service.iml" filepath="$PROJECT_DIR$/docs-service/docs-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mod-server/mod-server.iml" filepath="$PROJECT_DIR$/mod-server/mod-server.iml" />
+    </modules>
+  </component>
+</project>

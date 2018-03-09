@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="docs-common" />
+        <module name="docs-service" />
+        <module name="mod-server" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="api-docs" target="1.8" />
+      <module name="docs-common" target="1.8" />
+      <module name="docs-service" target="1.8" />
+      <module name="mod-server" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
